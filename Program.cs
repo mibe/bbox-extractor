@@ -14,7 +14,7 @@
 
 			if (outfile == null)
 			{
-				string path = Path.Combine(infile.DirectoryName, Path.GetFileNameWithoutExtension(infile.Name) + "-extracted.geojsonl");
+				string path = Path.Combine(infile.DirectoryName, Path.GetFileNameWithoutExtension(infile.Name) + "-extracted.geojson");
 				outfile = new FileInfo(path);
 			}
 
@@ -79,23 +79,26 @@
 				tw.WriteLine();
 			}
 
-			tw.WriteLine("bbox-extractor usage:");
+			tw.WriteLine("bbox-extractor");
+			tw.WriteLine("A tool to extract polygons from Microsoft's GlobalMLBuildingFootprints which are located inside a bounding box.");
+			tw.WriteLine("This tool also converts GeoJSONL to GeoJSON.");
 			tw.WriteLine();
+			tw.WriteLine("Usage:");
 			tw.WriteLine("Infile MinLon MinLat MaxLon MaxLat [Outfile]");
 			tw.WriteLine();
-			tw.WriteLine("Infile\t\tPath to source file");
+			tw.WriteLine("Infile\t\tPath to source file in GeoJSONL format");
 			tw.WriteLine("MinLon\t\tMinimum longitude");
 			tw.WriteLine("MinLat\t\tMinimum latitude");
 			tw.WriteLine("MaxLon\t\tMaximum longitude");
 			tw.WriteLine("MaxLat\t\tMaximum latitude");
-			tw.WriteLine("Outfile\t\tPath to file with extracted polygons");
+			tw.WriteLine("Outfile\t\tPath to file with extracted polygons in GeoJOSN format");
 			tw.WriteLine("\t\tIf not specified, the file will be saved in the");
 			tw.WriteLine("\t\tsame directory as the Infile.");
 			tw.WriteLine();
 			tw.WriteLine("The longitude and latitude values specify a bounding box.");
 			tw.WriteLine();
 			tw.WriteLine("Example:");
-			tw.WriteLine(@"bbox-extractor D:\Germany.geojsonl 10.2 50.1 11.9 51.6 D:\extracted.geojsonl");
+			tw.WriteLine(@"bbox-extractor D:\Germany.geojsonl 10.2 50.1 11.9 51.6 D:\extracted.geojson");
 			tw.WriteLine();
 		}
 	}

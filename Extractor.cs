@@ -32,9 +32,11 @@
 			FileStream outStream = outFile.OpenWrite();
 			Guard.CanWrite(outStream);
 			StreamWriter writer = new StreamWriter(outStream);
+			writer.Write("{\"type\": \"FeatureCollection\", \"features\": [");
 
 			StreamReader reader = new StreamReader(this.stream);
 			ulong counter = 0;
+			bool first = true;
 
 			while (reader.ReadLine() is { } feature)
 			{
@@ -43,7 +45,13 @@
 
 				if (inside)
 				{
-					writer.WriteLine(feature);
+					if (!first)
+						writer.Write(",");
+					else
+						first = false;
+
+					writer.Write(feature);
+
 					this.logger.Log("Found a polygon.");
 				}
 
@@ -54,6 +62,7 @@
 				}
 			}
 
+			writer.Write("]}");
 			writer.Close();
 			this.stream.Position = 0;
 		}
