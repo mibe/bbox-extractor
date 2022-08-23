@@ -64,7 +64,7 @@
 			bbox = new RectangleF(lonMin, latMin, lonMax - lonMin, latMax - latMin);
 
 			if (args.Length > 5)
-				outfile = new FileInfo(args[6]);
+				outfile = new FileInfo(args[5]);
 
 			return true;
 		}
