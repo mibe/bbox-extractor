@@ -29,9 +29,8 @@
 		{
 			Guard.IsNotNull(outFile);
 
-			FileStream outStream = outFile.OpenWrite();
-			Guard.CanWrite(outStream);
-			StreamWriter writer = new StreamWriter(outStream);
+			StreamWriter writer = new StreamWriter(outFile.FullName);
+			Guard.CanWrite(writer.BaseStream);
 			writer.Write("{\"type\": \"FeatureCollection\", \"features\": [");
 
 			StreamReader reader = new StreamReader(this.stream);
