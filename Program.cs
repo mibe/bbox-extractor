@@ -1,4 +1,11 @@
-﻿namespace bbox_extractor
+﻿/*
+ * Part of the bbox-extractor project
+ * Copyright (c) 2022 Michael Bemmerl
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+namespace bbox_extractor
 {
 	using System;
 	using System.Drawing;
@@ -7,6 +14,8 @@
 
 	class Program
 	{
+		const string Version = "1.0";
+
 		static void Main(string[] args)
 		{
 			if (!parseArgs(args, out FileInfo infile, out RectangleF bbox, out FileInfo outfile))
@@ -79,12 +88,14 @@
 				tw.WriteLine();
 			}
 
-			tw.WriteLine("bbox-extractor");
+			tw.WriteLine($"bbox-extractor version {Version}");
 			tw.WriteLine("A tool to extract polygons from Microsoft's GlobalMLBuildingFootprints which are located inside a bounding box.");
 			tw.WriteLine("This tool also converts GeoJSONL to GeoJSON.");
 			tw.WriteLine();
+			tw.WriteLine("This program is using CommunityToolkit (c) .NET Foundation and Contributors; MIT license");
+			tw.WriteLine();
 			tw.WriteLine("Usage:");
-			tw.WriteLine("Infile MinLon MinLat MaxLon MaxLat [Outfile]");
+			tw.WriteLine("bbox-extractor Infile MinLon MinLat MaxLon MaxLat [Outfile]");
 			tw.WriteLine();
 			tw.WriteLine("Infile\t\tPath to source file in GeoJSONL format");
 			tw.WriteLine("MinLon\t\tMinimum longitude");
