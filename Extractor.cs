@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+// ReSharper disable IdentifierTypo
 namespace bbox_extractor
 {
 	using System;
@@ -14,9 +15,17 @@ namespace bbox_extractor
 
 	class Extractor
 	{
+		/// <summary>
+		/// The stream of the GeoJSONL source file.
+		/// </summary>
 		private readonly FileStream stream;
-		private IFormatProvider formatProvider;
-		private ILogger logger;
+
+		private readonly IFormatProvider formatProvider;
+		private readonly ILogger logger;
+
+		/// <summary>
+		/// Number of processed features to trigger a status log.
+		/// </summary>
 		private const uint StatsTrigger = 100000;
 
 		internal Extractor(FileInfo source, ILogger logger)
@@ -32,6 +41,12 @@ namespace bbox_extractor
 			this.logger = logger;
 		}
 
+		/// <summary>
+		/// Extracts all features in the source file which are inside the bounding box specified in <paramref name="bbox"/>.
+		/// All features inside that bounding box will be written to the file in <paramref name="outFile"/>.
+		/// </summary>
+		/// <param name="bbox">Bounding box</param>
+		/// <param name="outFile">Output file</param>
 		internal void Extract(RectangleF bbox, FileInfo outFile)
 		{
 			Guard.IsNotNull(outFile);
@@ -44,11 +59,13 @@ namespace bbox_extractor
 			ulong counter = 0;
 			bool first = true;
 
+			// Repeat for every line in the file
 			while (reader.ReadLine() is { } feature)
 			{
 				bool inside = processFeature(feature, ref bbox);
 				counter++;
 
+				// If the feature was inside the bounding box, write it to the output file.
 				if (inside)
 				{
 					if (!first)
@@ -61,6 +78,7 @@ namespace bbox_extractor
 					this.logger.Log("Found a polygon.");
 				}
 
+				// Check if a status log is due.
 				if (counter % StatsTrigger == 0)
 				{
 					float percent = this.stream.Position / (float)this.stream.Length;
@@ -80,12 +98,14 @@ namespace bbox_extractor
 
 			do
 			{
+				// Search the position of the comma and closing bracket.
 				int commaIdx = json.IndexOf(',', idx);
 				int endIdx = json.IndexOf(']', idx);
 
 				if (commaIdx == -1)
 					break;
 
+				// Extract the longitude and latitude string using the comma and bracket positions.
 				string lonString = json.Substring(idx, commaIdx - idx);
 				string latString = json.Substring(commaIdx + 2, endIdx - commaIdx-2);
 
@@ -95,6 +115,7 @@ namespace bbox_extractor
 				if (bbox.Contains(lon, lat))
 					return true;
 
+				// Set index to next feature, so jump over some JSON element closing chars.
 				idx = endIdx + 4;
 
 			} while (idx < json.Length);

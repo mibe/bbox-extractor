@@ -11,6 +11,7 @@ namespace bbox_extractor
 	using System.Drawing;
 	using System.Globalization;
 	using System.IO;
+	using CommunityToolkit.Diagnostics;
 
 	class Program
 	{
@@ -20,6 +21,8 @@ namespace bbox_extractor
 		{
 			if (!parseArgs(args, out FileInfo infile, out RectangleF bbox, out FileInfo outfile))
 				return;
+
+			Guard.IsNotNull(infile);
 
 			if (outfile == null)
 			{
